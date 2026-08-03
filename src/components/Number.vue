@@ -30,6 +30,7 @@ const stateClass = computed(() => {
 
 const dotsStr = computed(() => {
   switch(props.dots) {
+    case -1: return '-'
     case 0: return '.'
     case 1: return '..'
     case 2: return '...'
@@ -50,7 +51,7 @@ function updateState() {
   .number {
     border: none;
     border-radius: 4px;
-    font-size: 2em;
+    font-size: 1.5em;
     display: flex;
     flex-direction: column;
     justify-content: center;
@@ -64,7 +65,7 @@ function updateState() {
     .dots {
       text-shadow: 0px 0px 4px #000000;
       color: #fff;
-      margin-top: -25px;
+      margin-top: -15px;
     }
 
     &.type-green {
@@ -95,7 +96,7 @@ function updateState() {
       background-color: transparent;
       opacity: 0.25;
 
-      .number-text {
+      .number-text, .dots {
         text-shadow: none;
         color: #000;
       }

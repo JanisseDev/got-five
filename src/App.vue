@@ -1,13 +1,20 @@
 <template>
-  <h1>Got five board</h1>
   <div class="board">
     <number
       v-for="(num, index) in 60"
       :id="num"
-      :dots="(Math.floor(index/5))%3"
+      :dots="getDots(index)"
       :color="getNumberColor(index)"
     />
   </div>
+
+  <!--<template v-for="(_, rowId) in 5">
+    <number
+      :id="getLonelyNumberInRow(rowId) ?? 0"
+      :dots="getDots(getLonelyNumberInRow(rowId)-1 ?? 0)"
+      :color="getNumberColor(rowId)"
+    />
+  </template>-->
 
   <button @click="numbersStateStore.clearStates">Clear board</button>
 </template>
@@ -26,6 +33,24 @@ function getNumberColor(id) {
     case 3: return 'type-red'
     case 4: return 'type-orange'
   }
+}
+
+function getLonelyNumberInRow(rowId) {
+  let activeCount = 0
+  let lonelyNumber = null
+  for(let i = 0; i < 12; i++) {
+    const number = i*5 + rowId
+    const state = numbersStateStore.states[number]
+    if(state === 0) {
+      lonelyNumber = number+1
+      activeCount++
+    }
+  }
+  return (activeCount == 1) ? lonelyNumber : null
+}
+
+function getDots(index) {
+  return (Math.floor(index/5))%3
 }
 </script>
 
@@ -62,5 +87,7 @@ body {
     --type-blue: #5081a8;
     --type-red: #cf3e24;
     --type-orange: #ea923e;
+
+    padding: 16px;
   }
 </style>
