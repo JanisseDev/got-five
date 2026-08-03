@@ -3,7 +3,8 @@
         class="number"
         :class="[stateClass, color]"
         @click="updateState">
-        <span>{{ id }}</span>
+        <span class="number-text">{{ id }}</span>
+        <span class="dots">{{ dotsStr }}</span>
     </button>
 </template>
 
@@ -15,6 +16,7 @@ const numbersStateStore = useNumbersStateStore()
 
 const props = defineProps({
   id: { type: Number, required: true },
+  dots: { type: Number, required: true },
   color: { type: String, required: true },
 })
 
@@ -23,6 +25,14 @@ const stateClass = computed(() => {
     case 0: return 'inactive'
     case 1: return 'range'
     case 2: return 'active'
+  }
+})
+
+const dotsStr = computed(() => {
+  switch(props.dots) {
+    case 0: return '.'
+    case 1: return '..'
+    case 2: return '...'
   }
 })
 
@@ -40,27 +50,37 @@ function updateState() {
   .number {
     border: none;
     border-radius: 4px;
-    height: 40px;
     font-size: 2em;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+
+    .number-text {
+      text-shadow: 0px 0px 4px #000000;
+      color: #fff;
+    }
+
+    .dots {
+      text-shadow: 0px 0px 4px #000000;
+      color: #fff;
+      margin-top: -25px;
+    }
 
     &.type-green {
       background-color: var(--type-green);
-      color: #fff;
     }
 
     &.type-pink {
       background-color: var(--type-pink);
-      color: #fff;
     }
 
     &.type-blue {
       background-color: var(--type-blue);
-      color: #fff;
     }
 
     &.type-red {
       background-color: var(--type-red);
-      color: #fff;
     }
 
     &.type-orange {
@@ -74,7 +94,11 @@ function updateState() {
     &.active {
       background-color: transparent;
       opacity: 0.25;
-      color: #000;
+
+      .number-text {
+        text-shadow: none;
+        color: #000;
+      }
     }
   }
 </style>

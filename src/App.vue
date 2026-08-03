@@ -2,8 +2,9 @@
   <h1>Got five board</h1>
   <div class="board">
     <number
-      v-for="index in 60"
-      :id="index"
+      v-for="(num, index) in 60"
+      :id="num"
+      :dots="(Math.floor(index/5))%3"
       :color="getNumberColor(index)"
     />
   </div>
@@ -32,6 +33,7 @@ function getNumberColor(id) {
   .board {
     display: grid;
     grid-template-rows: repeat(5, 1fr);
+    grid-template-columns: repeat(12, 1fr);
     grid-auto-flow: column;
     gap: 10px;
     margin-bottom: 60px;
