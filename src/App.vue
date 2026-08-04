@@ -16,7 +16,7 @@
     />
   </template>-->
 
-  <button @click="numbersStateStore.clearStates">Clear board</button>
+  <button class="clear-all" @click="numbersStateStore.clearStates">Clear board</button>
 </template>
 
 <script setup>
@@ -61,16 +61,21 @@ function getDots(index) {
     grid-template-columns: repeat(12, 1fr);
     grid-auto-flow: column;
     gap: 10px;
-    margin-bottom: 60px;
+    margin-bottom: 16px;
+    position: relative;
+    padding: 16px;
+    width: 100%;
+    height: calc(100% - 64px);
   }
 
   .clear-all {
-    margin-top: 20px;
-    padding: 10px;
-    font-size: 1.5em;
+    margin-left: 16px;
+    padding: 4px;
+    font-size: 1em;
     border-radius: 4px;
     border: none;
-    background-color: var(--type-blue);
+    background-color: var(--type-red);
+    text-shadow: 0px 0px 4px #000000;
     color: #fff;
   }
 </style>
@@ -88,6 +93,14 @@ body {
     --type-red: #cf3e24;
     --type-orange: #ea923e;
 
-    padding: 16px;
+    margin: 0;
+    width: 100vw;
+    height: 100vh;
+  }
+
+#app {
+    width: 100vw;
+    height: 100vh;
+    position: relative;
   }
 </style>
