@@ -6,6 +6,11 @@ import vueDevTools from 'vite-plugin-vue-devtools'
 
 // https://vite.dev/config/
 export default defineConfig({
+  // Served from GitHub Pages at /got-five/
+  base: '/got-five/',
+  build: {
+    outDir: 'docs',
+  },
   plugins: [
     vue(),
     vueDevTools(),

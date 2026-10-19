@@ -1,15 +1,19 @@
 <template>
-    <button 
+    <button
+        type="button"
         class="number"
         :class="[stateClass, color]"
+        :aria-label="`${id}, ${stateLabel}`"
         @click="updateState">
         <span class="number-text">{{ id }}</span>
-        <span class="dots">{{ dotsStr }}</span>
+        <span class="dots" aria-hidden="true">
+          <span v-for="dot in dots + 1" :key="dot" class="dot" />
+        </span>
     </button>
 </template>
 
 <script setup>
-import { computed, ref } from 'vue'
+import { computed } from 'vue'
 import { useNumbersStateStore } from '@/stores/numbersState.js'
 
 const numbersStateStore = useNumbersStateStore()
@@ -20,85 +24,114 @@ const props = defineProps({
   color: { type: String, required: true },
 })
 
-const stateClass = computed(() => {
-  switch(stateValue.value) {
-    case 0: return 'inactive'
-    case 1: return 'range'
-    case 2: return 'active'
-  }
-})
-
-const dotsStr = computed(() => {
-  switch(props.dots) {
-    case -1: return '-'
-    case 0: return '.'
-    case 1: return '..'
-    case 2: return '...'
-  }
-})
-
 // 0 -> Inactive
 // 1 -> Range
 // 2 -> Active
 const stateValue = computed(() => numbersStateStore.states[props.id - 1])
 
+const stateClass = computed(() => ['inactive', 'range', 'active'][stateValue.value])
+const stateLabel = computed(() => ['disponible', 'à portée', 'utilisé'][stateValue.value])
+
 function updateState() {
-  numbersStateStore.states[props.id - 1] = (stateValue.value + 1) % 3
+  numbersStateStore.cycleState(props.id - 1)
+  navigator.vibrate?.(10)
 }
 </script>
 
 <style scoped>
   .number {
-    border: none;
-    border-radius: 4px;
-    font-size: 1.5em;
+    --c: var(--type-green);
+
+    position: relative;
+    min-width: 0;
+    min-height: 0;
+    padding: 0;
+    border: 2px solid transparent;
+    border-radius: 0.35em;
+    background-color: var(--c);
+    color: #fff;
+    font: inherit;
+    font-size: var(--cell-font);
+    font-weight: 700;
+    line-height: 1;
     display: flex;
     flex-direction: column;
     justify-content: center;
     align-items: center;
+    gap: 0.12em;
+    cursor: pointer;
+    box-shadow: 0 0.08em 0 rgb(0 0 0 / 0.2);
+    transition: transform 80ms ease, background-color 150ms ease, opacity 150ms ease;
+
+    &:active {
+      transform: scale(0.92);
+    }
+
+    &:focus-visible {
+      outline: 3px solid var(--active-color);
+      outline-offset: 2px;
+    }
 
     .number-text {
-      text-shadow: 0px 0px 4px #000000;
-      color: #fff;
+      text-shadow: 0 1px 3px rgb(0 0 0 / 0.45);
     }
 
     .dots {
-      text-shadow: 0px 0px 4px #000000;
-      color: #fff;
-      margin-top: -15px;
+      display: flex;
+      gap: 0.12em;
     }
 
-    &.type-green {
-      background-color: var(--type-green);
+    .dot {
+      width: 0.2em;
+      height: 0.2em;
+      border-radius: 50%;
+      background-color: currentColor;
+      box-shadow: 0 1px 2px rgb(0 0 0 / 0.35);
     }
 
-    &.type-pink {
-      background-color: var(--type-pink);
-    }
+    &.type-green { --c: var(--type-green); }
+    &.type-pink { --c: var(--type-pink); }
+    &.type-blue { --c: var(--type-blue); }
+    &.type-red { --c: var(--type-red); }
+    &.type-orange { --c: var(--type-orange); }
 
-    &.type-blue {
-      background-color: var(--type-blue);
-    }
-
-    &.type-red {
-      background-color: var(--type-red);
-    }
-
-    &.type-orange {
-      background-color: var(--type-orange);
-    }
-
+    /* In range: light tint, dashed outline, colored text */
     &.range {
-      opacity: 0.5;
+      background-color: color-mix(in srgb, var(--c) 22%, var(--inactive-color));
+      border: 2px dashed var(--c);
+      color: color-mix(in srgb, var(--c) 80%, #000);
+      box-shadow: none;
+
+      .number-text, .dot {
+        text-shadow: none;
+        box-shadow: none;
+      }
     }
 
+    /* Used: faded and crossed out */
     &.active {
       background-color: transparent;
-      opacity: 0.25;
+      border: 2px solid color-mix(in srgb, var(--c) 25%, transparent);
+      color: color-mix(in srgb, var(--active-color) 35%, transparent);
+      box-shadow: none;
 
-      .number-text, .dots {
+      .number-text, .dot {
         text-shadow: none;
-        color: #000;
+        box-shadow: none;
+      }
+
+      &::after {
+        content: '';
+        position: absolute;
+        inset: 18%;
+        background: linear-gradient(
+          to top right,
+          transparent calc(50% - 1.5px),
+          color-mix(in srgb, var(--c) 70%, transparent) calc(50% - 1.5px),
+          color-mix(in srgb, var(--c) 70%, transparent) calc(50% + 1.5px),
+          transparent calc(50% + 1.5px)
+        );
+        pointer-events: none;
       }
     }
   }

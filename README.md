@@ -1,38 +1,56 @@
-# got-five
+# Got Five
 
-This template should help get you started developing with Vue 3 in Vite.
+Application compagnon pour le jeu de société **Got Five** : un plateau de 60 nombres (5 couleurs × 12) pour suivre l'état de chaque nombre en un coup d'œil.
 
-## Recommended IDE Setup
+Pensée pour le téléphone : tout le plateau tient sur un seul écran, sans défilement, en portrait comme en paysage.
 
-[VS Code](https://code.visualstudio.com/) + [Vue (Official)](https://marketplace.visualstudio.com/items?itemName=Vue.volar) (and disable Vetur).
+👉 **[Ouvrir l'application](https://janissedev.github.io/got-five/)**
 
-## Recommended Browser Setup
+<p align="center">
+  <img src="screenshots/portrait.png" alt="Plateau en mode portrait" height="480">
+  &nbsp;&nbsp;
+  <img src="screenshots/landscape.png" alt="Plateau en mode paysage" height="222">
+</p>
 
-- Chromium-based browsers (Chrome, Edge, Brave, etc.):
-  - [Vue.js devtools](https://chromewebstore.google.com/detail/vuejs-devtools/nhdogjmejiglipccpnnnanhbledajbpd)
-  - [Turn on Custom Object Formatter in Chrome DevTools](http://bit.ly/object-formatters)
-- Firefox:
-  - [Vue.js devtools](https://addons.mozilla.org/en-US/firefox/addon/vue-js-devtools/)
-  - [Turn on Custom Object Formatter in Firefox DevTools](https://fxdx.dev/firefox-devtools-custom-object-formatters/)
+## Utilisation
 
-## Customize configuration
+Touchez un nombre pour faire défiler ses trois états :
 
-See [Vite Configuration Reference](https://vite.dev/config/).
+1. Couleur pleine
+2. Teinte claire, contour en pointillés
+3. Estompé et barré
 
-## Project Setup
+Un troisième toucher le ramène à son état de départ.
+
+- **Réinitialiser** remet tout le plateau à zéro (après confirmation).
+- La partie est **sauvegardée automatiquement** dans le navigateur : on peut fermer l'onglet et reprendre plus tard.
+- L'écran reste **allumé** pendant la partie (si le navigateur le permet).
+
+### Plein écran
+
+- **Android** : bouton plein écran dans la barre d'outils, ou *Ajouter à l'écran d'accueil* pour l'ouvrir comme une app.
+- **iPhone** : Safari ne permet pas le plein écran depuis une page web. Utilisez *Partager → Sur l'écran d'accueil* : l'app s'ouvrira alors sans barre de navigation.
+
+## Développement
+
+Projet [Vue 3](https://vuejs.org/) + [Vite](https://vite.dev/), état géré avec [Pinia](https://pinia.vuejs.org/) (persisté dans le `localStorage`).
 
 ```sh
-npm install
+npm install      # installer les dépendances
+npm run dev      # serveur de développement
+npm run build    # build de production dans docs/
+npm run preview  # prévisualiser le build
 ```
 
-### Compile and Hot-Reload for Development
+### Déploiement
 
-```sh
-npm run dev
+Le site est servi par GitHub Pages depuis le dossier `docs/` de la branche `main`, sous le chemin `/got-five/` (voir `base` dans [vite.config.js](vite.config.js)). Pour publier une nouvelle version : `npm run build`, puis commiter le dossier `docs/`.
+
+### Structure
+
 ```
-
-### Compile and Minify for Production
-
-```sh
-npm run build
+src/
+├── App.vue                 # plateau, barre d'outils, dialogue de réinitialisation
+├── components/Number.vue   # une case du plateau
+└── stores/numbersState.js  # état des 60 nombres (0, 1 ou 2)
 ```

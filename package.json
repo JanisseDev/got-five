@@ -7,13 +7,12 @@
     "dev": "vite",
     "build": "vite build",
     "preview": "vite preview",
-    "deploy": "gh-pages -d dist"
+    "deploy": "gh-pages -d docs"
   },
   "dependencies": {
     "pinia": "^4.0.2",
     "pinia-plugin-persistedstate": "^4.7.1",
-    "vue": "^3.5.40",
-    "vue-router": "^5.2.0"
+    "vue": "^3.5.40"
   },
   "devDependencies": {
     "@vitejs/plugin-vue": "^6.0.8",

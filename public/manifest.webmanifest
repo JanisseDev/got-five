@@ -1,0 +1,14 @@
+{
+  "name": "Got Five",
+  "short_name": "Got Five",
+  "start_url": "./",
+  "scope": "./",
+  "display": "fullscreen",
+  "display_override": ["fullscreen", "standalone"],
+  "orientation": "any",
+  "background_color": "#fdf0d5",
+  "theme_color": "#fdf0d5",
+  "icons": [
+    { "src": "icon.svg", "sizes": "any", "type": "image/svg+xml", "purpose": "any maskable" }
+  ]
+}
